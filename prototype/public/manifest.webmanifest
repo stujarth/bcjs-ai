@@ -1,0 +1,13 @@
+{
+  "name": "BCJS Operations – Site",
+  "short_name": "BCJS Site",
+  "description": "BCJS site app: today's work, time, diary and evidence – works with no signal.",
+  "start_url": "/site",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#1A2123",
+  "theme_color": "#1A2123",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

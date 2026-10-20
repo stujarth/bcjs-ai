@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+/* BCJS brand: lime #9BBA3C on near-black #1F1F1F, slate greens, light grey. */
+:root {
+  --lime: #9bba3c;
+  --lime-dk: #7e9a2e;
+  --night: #1f1f1f;
+  --night-2: #1a2123;
+  --chrome: #263033;
+  --slate: #415155;
+  --green: #3e8e52;
+  --amber: #c8912f;
+  --red: #c0413c;
+
+  --bg: #f4f5f3;
+  --surface: #ffffff;
+  --surface-2: #f8f9f6;
+  --ink: #1f1f1f;
+  --muted: #68716f;
+  --hair: #e2e5e1;
+  --accent-ink: #46561f;
+  --accent-soft: #edf4dc;
+  --green-soft: #e6f1e1;
+  --amber-soft: #f7eedb;
+  --red-soft: #f9e7e5;
+  --chart-in: #3e8e52;
+  --chart-out: #c0413c;
+  --chart-net: #1f1f1f;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141819;
+    --surface: #1c2224;
+    --surface-2: #222a2c;
+    --ink: #eef0ec;
+    --muted: #9aa39f;
+    --hair: #2f383a;
+    --accent-ink: #c4dc7a;
+    --accent-soft: rgba(155, 186, 60, 0.16);
+    --green-soft: rgba(62, 142, 82, 0.2);
+    --amber-soft: rgba(200, 145, 47, 0.2);
+    --red-soft: rgba(192, 65, 60, 0.2);
+    --chart-in: #6cbf80;
+    --chart-out: #e07a74;
+    --chart-net: #eef0ec;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #141819;
+  --surface: #1c2224;
+  --surface-2: #222a2c;
+  --ink: #eef0ec;
+  --muted: #9aa39f;
+  --hair: #2f383a;
+  --accent-ink: #c4dc7a;
+  --accent-soft: rgba(155, 186, 60, 0.16);
+  --green-soft: rgba(62, 142, 82, 0.2);
+  --amber-soft: rgba(200, 145, 47, 0.2);
+  --red-soft: rgba(192, 65, 60, 0.2);
+  --chart-in: #6cbf80;
+  --chart-out: #e07a74;
+  --chart-net: #eef0ec;
+}
+
+@theme inline {
+  --color-lime: var(--lime);
+  --color-lime-dk: var(--lime-dk);
+  --color-night: var(--night);
+  --color-night-2: var(--night-2);
+  --color-chrome: var(--chrome);
+  --color-slate: var(--slate);
+  --color-good: var(--green);
+  --color-warn: var(--amber);
+  --color-bad: var(--red);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-hair: var(--hair);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-good-soft: var(--green-soft);
+  --color-warn-soft: var(--amber-soft);
+  --color-bad-soft: var(--red-soft);
+  --font-sans: "Helvetica Neue", Helvetica, Arial, ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--ink);
+}
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+.heading {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+}
