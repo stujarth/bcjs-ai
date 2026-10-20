@@ -84,21 +84,18 @@ Claude is the model, accessed through the Anthropic API with zero data retention
 | **Lessons learned:** estimate-v-final and loss reasons summarised into pricing insights | §16d, §17 | R6 |
 | **Heritage knowledge pack:** lime and listed-building method statements, plus conservation-officer correspondence templates (a niche Construction AI doesn't cover) | RAMS and docs | R6 |
 
-## 5. Phased roadmap
+## 5. Phased roadmap: MVP live in week 4
 
-Sean's release structure is kept, with Microsoft 365 and AI work folded in. Durations are indicative for a small senior team (see §7).
+Phases are ordered by value, not by the order of the process map. Releases R0–R6 from Sean's programme are regrouped below; the § references show where each part of his spec lands.
 
-| Release | Outcome | Scope (Sean § refs plus additions) | Indicative |
+| Phase | Outcome | Scope (Sean § refs plus additions) | Timing |
 |---|---|---|---|
-| **R0 Discovery & design** | Agreed blueprint | Department workshops (Lucy's request), process deep-dives, Kabyn/Briefcase audit, cost code structure (D3) and approval limits (D4) drafted, clickable prototype in BCJS brand from Marco's screens, data migration inventory, DPIA started | 3–4 wks |
-| **R1 Hold real work** | Platform live | §0, §1 on Azure, Entra SSO, §2 RBAC and audit, §3 gate engine, SharePoint project provisioning plus document register, Graph app registration, CI/CD, staging | 6–8 wks |
-| **R2 Win work** | Enquiry → quote → award in the system | §4–§7, Outlook send and reply filing, Acrobat Sign acceptance, survey and estimating AI, legacy workbook import, Teams channel on award | 8–10 wks |
-| **R3 Start properly** | Nobody on site until ready | §8–§9, RAMS AI, drawing register AI, Outlook calendar for the pre-start, Teams approvals | 5–6 wks |
-| **R4 Control cost & cash** | Live job cost and 13-week cash | §10–§13: POs, GRN, invoice AI, **Xero** (§11), time and subcontractors (§12, NFC optional), cash flow and scenarios (§13), site diary dictation PWA, variations/CVR, director dashboard, Ask-BCJS read-only | 10–12 wks |
-| **R5 Finish & get paid** | Snag → handover → final account | §14–§16, sales invoices to Xero, O&M pack assembled from SharePoint, warranty reminders | 5–6 wks |
-| **R6 Learn & harden** | Insight and compliance | §17–§19, report snapshots, Ask-BCJS write actions, Copilot agent and MCP, GDPR tooling, pen test, Cyber Essentials Plus alignment | 5–6 wks |
+| **Phase 1 MVP: control live jobs** | Live on BCJS's current jobs | Week 1 discovery sprint (cost codes D3, approval limits D4 and the live job list agreed by day 3). §1–§2 platform on Entra SSO with roles and audit; projects with cost codes and budgets imported from current sheets; SharePoint project folders; §10 POs with approval bands and Teams approvals; §11 Xero **read-only** (contacts, bills and payments matched to POs, tracking categories); cost report per job; variations register; director dashboard; site PWA with dictated diary, time and photos, all offline-capable | Weeks 1–4, live in week 4 |
+| **Phase 2: win work** | Enquiry to award in the system | §4–§7 enquiries, survey, estimating with rate card and AI scope drafting, quotes from Outlook, Acrobat Sign acceptance, award gate and estimate-to-budget carry, legacy workbook import; §3 stage gate engine | Weeks 5–8 |
+| **Phase 3: start properly, get paid** | Nobody on site until ready; cash known ahead | §8–§9 compliance registers, RAMS with AI drafter, readiness checklist and start-on-site gate; §12–§13 time approvals and 13-week cash flow with scenarios; valuations/CVR lock; **Xero write** (approved bills, sales invoices) after the pen test; AI invoice scanning | Weeks 9–12 |
+| **Phase 4: finish and learn** | Snag to final account; insight; hardening | §14–§19 snagging, handover packs, final account and retention, win/loss, report snapshots, GDPR tooling; Copilot agent and MCP; drawing-register and tender-comparison AI; Cyber Essentials Plus alignment | Weeks 13–18 |
 
-R1 to R6 lasts roughly **10–12 months**, with something usable after each release. The fastest value comes from R2 (quoting) and R4 (cost and cash). If BCJS wants cash visibility sooner, a **"Xero cash and cost lite"** dashboard can be pulled forward into R1 (read-only Xero plus tracking categories).
+The full system is in place in about **18 weeks**. Writing to Xero waits until Phase 3, after the penetration test, so the MVP never changes BCJS's ledger.
 
 ## 6. Decisions BCJS owes (with when they block)
 
@@ -108,7 +105,7 @@ New: **D9** SharePoint vs Blob as the file store (rec. SharePoint) · **D10** wh
 ## 7. Team, cost and commercial reality
 
 - **Team:** a lead full-stack engineer (TypeScript/Postgres), a second engineer from R2, part-time UX/design (R0–R2), part-time QA, and Stuart as product/delivery lead. BCJS provides a named process owner per department plus Lucy as product owner and signatory.
-- **Budget:** BCJS has had quotes of £20–30k, so both Scout options are priced inside that range (see `proposal/`). Option 1 is £29,500 fixed across R0–R6, paid per release, with the IP assigned to BCJS, plus an optional £295/month support retainer. Option 2 is a £7,500 implementation fee plus £895/month, with Scout keeping the IP and a £15,000 buy-out. This is only viable with AI-native delivery (Scout's 10×), not a conventional team billed by the day, so scope control matters. Any change beyond the 20-section spec goes through a signed change note, and each release fee is tied to Sean's witnessed sign-off.
+- **Budget:** BCJS has had quotes of £20–30k (see `proposal/`). Option 1, where BCJS owns the software and IP, is £49,500 fixed across the four phases, plus an optional £295/month support retainer; ownership carries a premium. Option 2 is SaaS: a £10,000 implementation fee plus £895/month, with Scout hosting, running and owning the platform. BCJS can export its data at any time. This is only viable with AI-native delivery (Scout's 10×), not a conventional team billed by the day, so scope control matters. Any change beyond the 20-section spec goes through a signed change note, and each phase fee is tied to Sean's witnessed sign-off.
 - **Running costs (indicative):** about £150–£350/month in total at BCJS's volumes (Azure plus Claude usage), plus a Xero API tier (check D11), Acrobat Sign (an existing Adobe licence may cover it), and Sentry. These are billed at cost.
 - **Build vs buy check in R0:** a short comparison of Construction AI pricing against this build, so BCJS makes an informed choice. The pitch for building: native M365 and Xero, heritage specialism, owning their data and IP, and no per-seat fees.
 
@@ -151,5 +148,5 @@ Sean's security checklist and §19 are adopted in full, plus: Entra conditional 
 ## 10. Verification
 
 - **Plan review:** walk through it with Lucy and Emma, and confirm each roadmap stage maps to their process roadmap with no gaps (Enquiry … O&M manual).
-- **During build, per release:** Sean's witness rule (a real job end to end, signed off by a named person); CI covering unit tests for the money, gate, CVR and cash engines, the RLS cross-tenant suite, and Playwright E2E for the release journey.
+- **During build, per phase:** Sean's witness rule (a real job end to end, signed off by a named person); CI covering unit tests for the money, gate, CVR and cash engines, the RLS cross-tenant suite, and Playwright E2E for the phase journey.
 - **Integrations:** the Xero demo company from staging only, then a reconciliation report showing a zero diff on live. An M365 dev or sandbox tenant for Graph before BCJS tenant consent. AI evaluations: a set of real BCJS invoices, diaries and surveys with accuracy thresholds before each AI feature ships.

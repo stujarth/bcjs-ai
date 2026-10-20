@@ -13,6 +13,9 @@ Construction AI's pitch is "AI from the ground up, not bolted on". This plan mat
 
 ## Features by release
 
+> **Release to phase mapping (fast-track plan):** R0–R1 plus the cost-control parts of R4 make up the **Phase 1 MVP (weeks 1–4)**. R2 becomes **Phase 2 (weeks 5–8)**. R3 and the cash, Xero-write and invoice-scanning parts of R4 become **Phase 3 (weeks 9–12)**. R5–R6 become **Phase 4 (weeks 13–18)**. The dictated site diary moves into the MVP.
+
+
 | Release | Feature | Input → output | Confirmed by |
 |---|---|---|---|
 | R2 | Enquiry triage | Web form or email → client match / duplicate warning, suggested owner, summary | Ops |

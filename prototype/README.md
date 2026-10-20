@@ -12,7 +12,7 @@ pnpm build && pnpm start
 
 ## What's in it
 
-| Route | Screen | Plan release |
+| Route | Screen | Plan phase (release) |
 |---|---|---|
 | `/` | Director dashboard: KPIs, caught-early banner, needs-attention list, cash sparkline | R4 |
 | `/enquiries`, `/enquiries/[id]` | Pipeline kanban, enquiry timeline, site survey, convert to tender | R2 |

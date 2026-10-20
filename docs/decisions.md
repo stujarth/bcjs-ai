@@ -2,6 +2,8 @@
 
 These are the decisions BCJS owes the build. Each one names what it blocks and when it is needed. D1–D8 come from Sean's Build Programme; D9–D17 are new and arise from the Microsoft 365, Xero and AI scope in the [delivery plan](delivery-plan.md).
 
+> **Release to phase mapping (fast-track plan):** R0–R1 plus the cost-control parts of R4 make up the **Phase 1 MVP (weeks 1–4)**. R2 becomes **Phase 2 (weeks 5–8)**. R3 and the cash, Xero-write and invoice-scanning parts of R4 become **Phase 3 (weeks 9–12)**. R5–R6 become **Phase 4 (weeks 13–18)**. Decisions marked "R1 start" or "During R2" (D1, D3, D4, D9, D12) are now needed in **MVP week 1**.
+
 Status key: **Open** = not yet discussed · **Proposed** = recommendation made, awaiting BCJS · **Agreed** = signed off (record who and when).
 
 | # | Decision | Recommendation | Owner (BCJS) | Needed by | Blocks | Status |
