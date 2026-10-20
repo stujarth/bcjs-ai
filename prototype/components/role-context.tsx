@@ -15,11 +15,11 @@ export const roles: { key: RoleKey; label: string; person: string; initials: str
 // Which nav sections each role sees. Production enforces this server-side (Sean §2);
 // here it only shapes the prototype navigation.
 export const roleAccess: Record<RoleKey, string[]> = {
-  director: ["dashboard", "enquiries", "estimates", "projects", "commercial", "procurement", "cashflow", "site", "compliance", "integrations"],
-  qs: ["dashboard", "enquiries", "estimates", "projects", "commercial", "procurement", "cashflow", "site"],
-  pm: ["dashboard", "enquiries", "estimates", "projects", "commercial", "procurement", "site", "compliance"],
-  finance: ["dashboard", "commercial", "procurement", "cashflow", "integrations"],
-  site: ["projects", "site", "compliance"],
+  director: ["dashboard", "insights", "contracts", "enquiries", "estimates", "tenders", "library", "projects", "commercial", "procurement", "cashflow", "site", "compliance", "integrations"],
+  qs: ["dashboard", "insights", "contracts", "enquiries", "estimates", "tenders", "library", "projects", "commercial", "procurement", "cashflow", "site"],
+  pm: ["dashboard", "insights", "contracts", "enquiries", "estimates", "tenders", "library", "projects", "commercial", "procurement", "site", "compliance"],
+  finance: ["dashboard", "insights", "contracts", "commercial", "procurement", "cashflow", "integrations"],
+  site: ["insights", "projects", "site", "compliance"],
   subcontractor: ["site"],
 };
 

@@ -777,3 +777,330 @@ export const invoiceDocuments: InvoiceDocument[] = [
     ],
   },
 ];
+
+// ---------- Contracts, payments, external parties, inspections ----------
+
+export const TODAY_ISO = "2026-10-20";
+
+export interface ContractTerm {
+  label: string;
+  value: string;
+  clause: string;
+}
+
+export interface MainContract {
+  projectId: string;
+  form: string;
+  fileName: string;
+  pages: number;
+  contractSumPence: number;
+  retentionPct: number;
+  /** Day of month the interim application is made. */
+  applicationDay: number;
+  /** Days from application to due date. */
+  dueAfterDays: number;
+  /** Days from due date to final date for payment. */
+  finalAfterDays: number;
+  /** Payment notice: days after the due date. */
+  paymentNoticeAfterDueDays: number;
+  /** Pay-less notice: days before the final date. */
+  payLessBeforeFinalDays: number;
+  firstCycleMonth: string; // YYYY-MM
+  terms: ContractTerm[];
+}
+
+export const mainContracts: MainContract[] = [
+  {
+    projectId: "goytre",
+    form: "JCT Minor Works Building Contract 2016 (MW 2016)",
+    fileName: "JCT-MW-2611-signed.pdf",
+    pages: 46,
+    contractSumPence: 84_890_000,
+    retentionPct: 3,
+    applicationDay: 25,
+    dueAfterDays: 7,
+    finalAfterDays: 14,
+    paymentNoticeAfterDueDays: 5,
+    payLessBeforeFinalDays: 5,
+    firstCycleMonth: "2026-08",
+    terms: [
+      { label: "Employer", value: "Mr & Mrs Ashworth", clause: "Articles, p.2" },
+      { label: "Contract sum", value: "£848,900.00 excl. VAT", clause: "Article 2" },
+      { label: "Date for commencement", value: "06 Jul 2026", clause: "Contract Particulars, 2.2" },
+      { label: "Date for completion", value: "18 Dec 2026", clause: "Contract Particulars, 2.2" },
+      { label: "Liquidated damages", value: "£1,250 per week or part week", clause: "Contract Particulars, 2.8" },
+      { label: "Rectification period", value: "12 months from practical completion", clause: "Contract Particulars, 2.10" },
+      { label: "Retention", value: "3% (1.5% released at practical completion)", clause: "Contract Particulars, 4.3 / 4.4" },
+      { label: "Interim payments", value: "Monthly; due 7 days after each application", clause: "Clause 4.3" },
+      { label: "Final date for payment", value: "14 days after the due date", clause: "Clause 4.3" },
+      { label: "Payment / pay-less notices", value: "Payment notice within 5 days of due date; pay-less notice no later than 5 days before final date", clause: "Clauses 4.4 / 4.5" },
+    ],
+  },
+];
+
+export type CisStatus = "gross" | "20" | "30";
+
+export interface Subcontract {
+  ref: string;
+  projectId: string;
+  party: string;
+  trade: string;
+  valuePence: number;
+  /** Labour element of the value, which CIS applies to. */
+  labourPence: number;
+  retentionPct: number;
+  cis: CisStatus;
+  drcVat: boolean;
+  commitmentRef: string | null;
+  paymentTermsDays: number;
+  nextApplicationIso: string;
+}
+
+export const subcontracts: Subcontract[] = [
+  { ref: "SC-2611-03", projectId: "goytre", party: "Llanover Joinery Co", trade: "First floor joinery & oak staircase", valuePence: 3_850_000, labourPence: 2_400_000, retentionPct: 5, cis: "20", drcVat: true, commitmentRef: "CM-0412", paymentTermsDays: 30, nextApplicationIso: "2026-10-28" },
+  { ref: "SC-2611-01", projectId: "goytre", party: "Gwent Groundworks", trade: "Groundworks, drainage & piling", valuePence: 15_200_000, labourPence: 6_100_000, retentionPct: 5, cis: "gross", drcVat: true, commitmentRef: "CM-0398", paymentTermsDays: 30, nextApplicationIso: "2026-10-25" },
+  { ref: "SC-2611-05", projectId: "goytre", party: "Brecon Roofing", trade: "Re-slating & leadwork", valuePence: 5_840_000, labourPence: 3_100_000, retentionPct: 3, cis: "30", drcVat: true, commitmentRef: null, paymentTermsDays: 30, nextApplicationIso: "2026-11-02" },
+];
+
+export interface ExternalParty {
+  name: string;
+  organisation: string;
+  role: "Client QS" | "Architect" | "Client" | "Structural engineer";
+  email: string;
+  sees: string[];
+  invited: string;
+  status: "active" | "invited";
+}
+
+export const externalParties: Record<string, ExternalParty[]> = {
+  goytre: [
+    { name: "Megan Rees", organisation: "Cardiff QS Partnership", role: "Client QS", email: "megan@example.com", sees: ["Applications & valuations", "Variations", "Payment notices"], invited: "08 Jul 2026", status: "active" },
+    { name: "Tom Hartley", organisation: "Hartley Architects", role: "Architect", email: "tom@example.com", sees: ["Drawings", "RFIs", "Instructions"], invited: "08 Jul 2026", status: "active" },
+    { name: "Mr & Mrs Ashworth", organisation: "Client", role: "Client", email: "ashworth@example.com", sees: ["Progress photos", "Programme", "Handover pack"], invited: "10 Jul 2026", status: "active" },
+  ],
+};
+
+/** CVR margin history for Goytre, period by period. */
+export const cvrHistory: Record<string, { period: string; marginPct: number }[]> = {
+  goytre: [
+    { period: "P5 Jul", marginPct: 15.0 },
+    { period: "P6 Aug", marginPct: 14.6 },
+    { period: "P7 Sep", marginPct: 13.6 },
+    { period: "P8 Oct", marginPct: 14.2 },
+  ],
+};
+
+export interface InspectionItem {
+  id: string;
+  label: string;
+  guidance: string;
+}
+
+export interface InspectionTemplate {
+  key: string;
+  name: string;
+  standard: string;
+  projectId: string;
+  location: string;
+  costCode: string;
+  owner: string;
+  items: InspectionItem[];
+}
+
+export const inspectionTemplates: InspectionTemplate[] = [
+  {
+    key: "sg4",
+    name: "Scaffold weekly inspection",
+    standard: "NASC SG4 / TG20",
+    projectId: "goytre",
+    location: "Full perimeter scaffold, Block A",
+    costCode: "PRE-01 Preliminaries (scaffold)",
+    owner: "Brecon Scaffolding",
+    items: [
+      { id: "i1", label: "Base plates and sole boards sound and level", guidance: "No undermining after rain" },
+      { id: "i2", label: "Ties at correct spacing and secure", guidance: "Per TG20 compliance sheet" },
+      { id: "i3", label: "Guardrails, mid-rails and toe boards in place", guidance: "All working lifts" },
+      { id: "i4", label: "Boards fully supported, no traps or gaps", guidance: "" },
+      { id: "i5", label: "Ladder access secured and extends 1m above platform", guidance: "" },
+      { id: "i6", label: "Loading bay gate closed and working", guidance: "" },
+      { id: "i7", label: "Scafftag in date and signed", guidance: "Inspected within the last 7 days" },
+    ],
+  },
+];
+
+// ---------- Library & tenders (appended) ----------
+export type LibraryKind = "rates" | "scopes" | "drm" | "attendances" | "prelims" | "payment" | "templates";
+
+export interface RateLine {
+  code: string;
+  description: string;
+  unit: string;
+  ratePence: number;
+}
+
+export interface LibraryItem {
+  id: string;
+  kind: LibraryKind;
+  name: string;
+  description: string;
+  count: number;
+  countLabel: string;
+  owner: string;
+  updated: string;
+  year?: number;
+  rates?: RateLine[];
+}
+
+export const libraryItems: LibraryItem[] = [
+  {
+    id: "rb-joi", kind: "rates", name: "BCJS Joinery rates 2026", description: "Oak frame, staircases, sash windows, bespoke joinery", count: 46, countLabel: "rates", owner: "James Price", updated: "02 Oct 2026", year: 2026,
+    rates: [
+      { code: "JOI-001", description: "Green oak frame – supply & erect", unit: "m³", ratePence: 412_000 },
+      { code: "JOI-014", description: "Oak floorboards 20mm – supply & fit", unit: "m²", ratePence: 9_850 },
+      { code: "JOI-022", description: "Timber sash window, double glazed", unit: "nr", ratePence: 152_000 },
+      { code: "JOI-031", description: "Oak staircase, straight flight", unit: "nr", ratePence: 680_000 },
+    ],
+  },
+  {
+    id: "rb-lime", kind: "rates", name: "Lime & masonry rates 2025", description: "NHL pointing, lime plaster, render, stone rebuild", count: 28, countLabel: "rates", owner: "James Price", updated: "14 Nov 2025", year: 2025,
+    rates: [
+      { code: "MAS-002", description: "Rake out & repoint, NHL 3.5", unit: "m²", ratePence: 6_000 },
+      { code: "MAS-011", description: "Lime plaster, 2-coat, internal walls", unit: "m²", ratePence: 3_750 },
+      { code: "MAS-015", description: "Three-coat lime render", unit: "m²", ratePence: 7_300 },
+      { code: "MAS-020", description: "Limecrete floor slab with insulation", unit: "m²", ratePence: 7_200 },
+    ],
+  },
+  {
+    id: "rb-grd", kind: "rates", name: "Groundworks rates 2025", description: "Excavation, drainage, slabs", count: 33, countLabel: "rates", owner: "Dave Rowntree", updated: "03 Sep 2025", year: 2025,
+    rates: [
+      { code: "GRD-004", description: "Excavate & cart away", unit: "m³", ratePence: 4_600 },
+      { code: "GRD-012", description: "Foul drainage run, 100mm", unit: "m", ratePence: 9_100 },
+      { code: "GRD-018", description: "Type 1 sub-base, 150mm", unit: "m²", ratePence: 1_450 },
+    ],
+  },
+  { id: "sc-oak", kind: "scopes", name: "Oak frame – supply & erect", description: "Design, fabrication, delivery, crane lift, erection, pegging", count: 18, countLabel: "clauses", owner: "Gareth Thomas", updated: "21 Aug 2026" },
+  { id: "sc-roof", kind: "scopes", name: "Slate roofing & leadwork", description: "Strip, battens, membrane, reclaimed Welsh slate, Code 5 lead", count: 22, countLabel: "clauses", owner: "Gareth Thomas", updated: "11 Jun 2026" },
+  { id: "sc-mep", kind: "scopes", name: "Air source heat pump & UFH", description: "Design, MCS certification, commissioning, handover", count: 16, countLabel: "clauses", owner: "Lucy Milne", updated: "30 Jul 2026" },
+  { id: "drm-std", kind: "drm", name: "Domestic design responsibility matrix", description: "Architect / engineer / BCJS / subcontractor split", count: 24, countLabel: "activities", owner: "Lucy Milne", updated: "18 Mar 2026" },
+  { id: "drm-her", kind: "drm", name: "Heritage & listed building DRM", description: "Adds conservation officer and heritage consultant", count: 31, countLabel: "activities", owner: "Lucy Milne", updated: "05 May 2026" },
+  { id: "att-std", kind: "attendances", name: "Standard attendances", description: "Welfare, power, water, scaffold, skips, hoisting", count: 19, countLabel: "items", owner: "Dave Rowntree", updated: "12 Jan 2026" },
+  { id: "pre-std", kind: "prelims", name: "Residential prelims", description: "Site set-up, welfare, management, insurances, cleaning", count: 27, countLabel: "items", owner: "James Price", updated: "09 Feb 2026" },
+  { id: "pay-14", kind: "payment", name: "14 day payment terms", description: "Monthly applications, due date +14 days, 3% retention", count: 12, countLabel: "cycles", owner: "Rhian Howells", updated: "04 Apr 2026" },
+  { id: "pay-30", kind: "payment", name: "30 day payment terms", description: "Monthly applications, due date +30 days, 5% retention", count: 12, countLabel: "cycles", owner: "Rhian Howells", updated: "04 Apr 2026" },
+  { id: "pay-35", kind: "payment", name: "35 day payment terms", description: "Monthly applications, due date +35 days, 5% retention", count: 12, countLabel: "cycles", owner: "Rhian Howells", updated: "04 Apr 2026" },
+  { id: "tpl-enq", kind: "templates", name: "Subcontract enquiry letter", description: "Invitation to tender with return and RFI deadlines", count: 14, countLabel: "variables", owner: "Lucy Milne", updated: "16 Sep 2026" },
+  { id: "tpl-ret", kind: "templates", name: "Tender return letter", description: "Cover letter to the client with the BCJS quotation", count: 11, countLabel: "variables", owner: "Lucy Milne", updated: "16 Sep 2026" },
+  { id: "tpl-sub", kind: "templates", name: "Subcontract particulars", description: "Order particulars, programme, retention, CIS, DRC", count: 22, countLabel: "variables", owner: "Rhian Howells", updated: "02 Oct 2026" },
+];
+
+export type BidRag = "green" | "amber" | "red";
+
+export interface BidLine {
+  item: string;
+  pricesPence: number[]; // one per bidder, same order as bidders
+  rag: BidRag;
+  note?: string;
+}
+
+export interface Bidder {
+  name: string;
+  supplierId?: string;
+  portalOpened: string | null;
+  returned: boolean;
+  unlistedPence: number;
+  pricingQuals: string[];
+  standardQuals: string[];
+  normalisationPence: number;
+}
+
+export interface TenderQuery {
+  ref: string;
+  bidder: string;
+  rag: BidRag;
+  query: string;
+  valuePence?: number;
+}
+
+export interface TenderPackage {
+  id: string;
+  ref: string;
+  project: string;
+  estimateRef: string;
+  code: string;
+  name: string;
+  trade: string;
+  status: "draft" | "out to tender" | "analysis" | "awarded";
+  issued: string;
+  rfiDeadline: string;
+  returnDeadline: string;
+  scopeId: string;
+  drmId: string;
+  attendancesId: string;
+  paymentId: string;
+  documents: { number: string; title: string; revision: string }[];
+  budgetPence: number;
+  bidders: Bidder[];
+  lines: BidLine[];
+  tqs: TenderQuery[];
+}
+
+export const tenderPackages: TenderPackage[] = [
+  {
+    id: "tp-joi", ref: "TP-0236-JOI", project: "The Old Forge – barn conversion", estimateRef: "EST-0236", code: "JOI", name: "JOI oak frame", trade: "Joinery & oak frame",
+    status: "analysis", issued: "05 Oct 2026", rfiDeadline: "12 Oct 2026", returnDeadline: "19 Oct 2026",
+    scopeId: "sc-oak", drmId: "drm-her", attendancesId: "att-std", paymentId: "pay-30",
+    documents: [
+      { number: "HA-OF-201", title: "Ground floor plan", revision: "B" },
+      { number: "HA-OF-301", title: "Oak frame elevations", revision: "A" },
+      { number: "SE-OF-04", title: "Frame engineering calcs", revision: "P1" },
+    ],
+    budgetPence: 3_850_000,
+    bidders: [
+      { name: "Llanover Joinery Co", supplierId: "su1", portalOpened: "06 Oct 09:14", returned: true, unlistedPence: 0, pricingQuals: ["Crane hire excluded – by main contractor"], standardQuals: ["Price valid 30 days", "Programme subject to timber availability"], normalisationPence: 185_000 },
+      { name: "Wye Valley Oak Frames", portalOpened: "06 Oct 16:40", returned: true, unlistedPence: 42_000, pricingQuals: [], standardQuals: ["Price valid 60 days"], normalisationPence: 0 },
+      { name: "Black Mountains Timber Frame", portalOpened: null, returned: false, unlistedPence: 0, pricingQuals: [], standardQuals: [], normalisationPence: 0 },
+    ],
+    lines: [
+      { item: "Frame design & engineering coordination", pricesPence: [240_000, 310_000, 0], rag: "amber", note: "Wye Valley 29% higher" },
+      { item: "Green oak supply (11.2 m³)", pricesPence: [1_780_000, 1_860_000, 0], rag: "green" },
+      { item: "Fabrication & jointing", pricesPence: [960_000, 1_020_000, 0], rag: "green" },
+      { item: "Delivery & crane lift", pricesPence: [0, 210_000, 0], rag: "red", note: "Llanover excludes crane – normalised at £1,850" },
+      { item: "Erection & pegging", pricesPence: [540_000, 520_000, 0], rag: "green" },
+      { item: "Preservative & finishing", pricesPence: [95_000, 60_000, 0], rag: "amber", note: "Llanover 58% higher" },
+    ],
+    tqs: [
+      { ref: "TQ-01", bidder: "Llanover Joinery Co", rag: "red", query: "Crane hire is excluded. Please price the 25t mobile crane for a 1-day lift including the appointed person.", valuePence: 185_000 },
+      { ref: "TQ-02", bidder: "Llanover Joinery Co", rag: "amber", query: "Preservative & finishing is 58% above the other return. Please confirm specification and coats." },
+      { ref: "TQ-03", bidder: "Wye Valley Oak Frames", rag: "amber", query: "Design & engineering is 29% above the other return. Does this include the structural engineer's site visits?" },
+      { ref: "TQ-04", bidder: "Wye Valley Oak Frames", rag: "amber", query: "Unlisted item 'Temporary propping' £420. Confirm this is required by the frame design." },
+    ],
+  },
+  {
+    id: "tp-rof", ref: "TP-0236-ROF", project: "The Old Forge – barn conversion", estimateRef: "EST-0236", code: "ROF", name: "ROF roofing", trade: "Slate & leadwork",
+    status: "out to tender", issued: "09 Oct 2026", rfiDeadline: "16 Oct 2026", returnDeadline: "23 Oct 2026",
+    scopeId: "sc-roof", drmId: "drm-her", attendancesId: "att-std", paymentId: "pay-30",
+    documents: [
+      { number: "HA-OF-210", title: "Roof plan", revision: "A" },
+      { number: "HA-OF-410", title: "Eaves & verge details", revision: "A" },
+    ],
+    budgetPence: 1_977_600,
+    bidders: [
+      { name: "Brecon Roofing", supplierId: "su3", portalOpened: "09 Oct 11:02", returned: false, unlistedPence: 0, pricingQuals: [], standardQuals: [], normalisationPence: 0 },
+      { name: "Monmouth Slate & Lead", portalOpened: "10 Oct 08:30", returned: false, unlistedPence: 0, pricingQuals: [], standardQuals: [], normalisationPence: 0 },
+    ],
+    lines: [],
+    tqs: [],
+  },
+  {
+    id: "tp-mep", ref: "TP-0236-MEP", project: "The Old Forge – barn conversion", estimateRef: "EST-0236", code: "MEP", name: "MEP heat pump & UFH", trade: "Mechanical & electrical",
+    status: "draft", issued: "–", rfiDeadline: "30 Oct 2026", returnDeadline: "06 Nov 2026",
+    scopeId: "sc-mep", drmId: "drm-std", attendancesId: "att-std", paymentId: "pay-35",
+    documents: [{ number: "MEP-OF-01", title: "Heating layout", revision: "P1" }],
+    budgetPence: 2_410_000,
+    bidders: [
+      { name: "Usk Valley Electrical", supplierId: "su4", portalOpened: null, returned: false, unlistedPence: 0, pricingQuals: [], standardQuals: [], normalisationPence: 0 },
+    ],
+    lines: [],
+    tqs: [],
+  },
+];

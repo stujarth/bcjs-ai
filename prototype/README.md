@@ -16,8 +16,12 @@ pnpm build && pnpm start
 |---|---|---|
 | `/` | Director dashboard: KPIs, caught-early banner, needs-attention list, cash sparkline | R4 |
 | `/enquiries`, `/enquiries/[id]` | Pipeline kanban, enquiry timeline, site survey, convert to tender | R2 |
-| `/estimates/est-0236` | Estimate builder: rate-card overrides, versions, AI scope draft, quote preview, Outlook / Acrobat Sign send | R2 |
+| `/estimates/est-0236` | Estimate builder: drawing take-off, rate-card overrides, versions, AI scope draft, quote preview, Outlook / Acrobat Sign send | R2 |
 | `/projects`, `/projects/[id]` | Project hub: stage gate and override, documents (SharePoint), RAMS, programme, snags, audit | R1–R5 |
+| `/library` | Library: rate books, scopes, DRM, attendances, prelims, payment schedules, templates; AI bulk rate change with preview | Phase 2 |
+| `/tenders`, `/tenders/[id]` | Tender packages: AI enquiry letter, invitees with portal status, AI bid analysis (RAG, TQs, normalisation), adjudication, award to subcontract order | Phase 2 |
+| `/contracts` | AI contract reading with clause references, Construction Act payment and pay-less notice cycles, subcontracts with CIS and reverse charge, commitment gateway, external parties | Phase 3 |
+| `/insights` | AI briefings: Friday summary, 14-day look-ahead, per-role morning briefing, CVR commentary, programme agent, inspections that raise snags | Phases 3–4 |
 | `/commercial` | CVR & variation register, with forecast-inclusion toggles | R4 |
 | `/procurement` | POs & approval bands, Xero feed, AI invoice extraction review, Teams approval card | R4 |
 | `/cashflow` | 13-week cash flow with scenarios | R4 |

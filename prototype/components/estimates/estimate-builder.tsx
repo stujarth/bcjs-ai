@@ -8,8 +8,9 @@ import { estimateVersions } from "@/lib/mock/data";
 import type { Estimate, LineKind } from "@/lib/mock/types";
 import { formatMoney, pct } from "@/lib/money";
 import { calculate, isOverride, lineTotal } from "./calc";
+import { Takeoff } from "./takeoff";
 
-type Tab = "build" | "quote" | "versions";
+type Tab = "build" | "takeoff" | "quote" | "versions";
 
 const kindLabel: Record<LineKind, string> = { labour: "Labour", material: "Materials", plant: "Plant", subcontract: "Subcontract" };
 
@@ -133,6 +134,7 @@ export function EstimateBuilder({ estimate }: { estimate: Estimate }) {
         onChange={setTab}
         tabs={[
           { key: "build", label: "Build-up" },
+          { key: "takeoff", label: "Take-off" },
           { key: "quote", label: "Customer quote preview" },
           { key: "versions", label: "Versions", count: versions.length },
         ]}
@@ -349,6 +351,8 @@ export function EstimateBuilder({ estimate }: { estimate: Estimate }) {
           </div>
         </div>
       )}
+
+      {tab === "takeoff" && <Takeoff />}
 
       {tab === "versions" && (
         <div className="grid gap-5 lg:grid-cols-2">
