@@ -108,8 +108,8 @@ New: **D9** SharePoint vs Blob as the file store (rec. SharePoint) · **D10** wh
 ## 7. Team, cost and commercial reality
 
 - **Team:** a lead full-stack engineer (TypeScript/Postgres), a second engineer from R2, part-time UX/design (R0–R2), part-time QA, and Stuart as product/delivery lead. BCJS provides a named process owner per department plus Lucy as product owner and signatory.
-- **Budget reality:** Marco's **£20k / 6 months** for 16 modules is not credible for this spec; Sean's spec alone is many engineer-months. Present BCJS with a staged commercial: a fixed price for R0, then per-release fixed price or a capped T&M, each tied to Sean's witness sign-off. (Day rates and the total to be set by Stuart; the plan provides effort ranges per release above.)
-- **Running costs (indicative):** Azure about £150–£400/month, Claude usage about £50–£250/month depending on volume, a Xero API tier (check D11), Acrobat Sign (an existing Adobe licence may cover it), and Sentry. These are billed at cost.
+- **Budget:** BCJS has had quotes of £20–30k, so both Scout options are priced inside that range (see `proposal/`). Option 1 is £29,500 fixed across R0–R6, paid per release, with the IP assigned to BCJS, plus an optional £295/month support retainer. Option 2 is a £7,500 implementation fee plus £895/month, with Scout keeping the IP and a £15,000 buy-out. This is only viable with AI-native delivery (Scout's 10×), not a conventional team billed by the day, so scope control matters. Any change beyond the 20-section spec goes through a signed change note, and each release fee is tied to Sean's witnessed sign-off.
+- **Running costs (indicative):** about £150–£350/month in total at BCJS's volumes (Azure plus Claude usage), plus a Xero API tier (check D11), Acrobat Sign (an existing Adobe licence may cover it), and Sentry. These are billed at cost.
 - **Build vs buy check in R0:** a short comparison of Construction AI pricing against this build, so BCJS makes an informed choice. The pitch for building: native M365 and Xero, heritage specialism, owning their data and IP, and no per-seat fees.
 
 ## 8. Security, GDPR & compliance

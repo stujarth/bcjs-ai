@@ -46,7 +46,7 @@ The showcase sets out 16 modules over 6 months for **£20,000** (hosting extra),
 
 Brand cues: lime `#9BBA3C` on near-black `#1F1F1F`, slate greens, uppercase headings.
 
-**What we keep:** the UX direction and screens, which the prototype builds on. **Our view on the commercials:** £20k for this scope is not credible; see delivery plan §7.
+**What we keep:** the UX direction and screens, which the prototype builds on. **Commercials:** BCJS has had quotes of £20–30k. Scout's two options are priced to compete inside that range while covering the full spec plus Microsoft 365, Xero and AI. See delivery plan §7.
 
 ## Construction AI (benchmark)
 
