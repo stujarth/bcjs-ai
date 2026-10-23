@@ -15,6 +15,21 @@ These are summaries of the documents BCJS shared in October 2026. The originals 
 
 **Current systems:** Xero, Microsoft 365 Business, Adobe, Microsoft Teams Essentials, Kabyn, Briefcase.
 
+## Kabyn (Lucy Milne, 23 October 2026)
+
+- **What it was for:** end-to-end tracking of tools and equipment: hire status, locations, asset movements and accountability.
+- **Where it stands:**
+  - It is partly working after 10 months of development.
+  - The mobile app and QR code rollout were never reached, because the platform still needs significant refinement.
+  - Lucy is "unconvinced that the system delivers the functionality, reliability and user experience we require", and BCJS is reviewing alternatives.
+  - She will demo it at next week's meeting.
+- **What the dashboard shows:**
+  - 589 items in a flat list, with every unit its own row (e.g. each Heras fence panel and each wheelbarrow separately).
+  - Columns: Name, Category, Ownership (owned or hired), Status, Current location, Supplier.
+  - Menus: On hire, Hire returned, Health and safety, Contracts, Costs, Locations, Projects.
+  - Suppliers include Travis Perkins, Hughes Forrest, Versatool (hire) and B&Q.
+- **Our response:** replace it with the OCS Tools & Equipment module in Phase 2, at no extra cost (see delivery plan §5).
+
 **Process mapping to the plan:** stages 1–3 map to R2 (Win work), stage 4's pre-start to R3, delivery and variations to R4, and close-out to R5–R6. Weekly project reviews are served by the dashboard and CVR period lock.
 
 ## Sean: Build Programme & Technical Implementation Order

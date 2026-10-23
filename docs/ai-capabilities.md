@@ -34,6 +34,8 @@ Construction AI's pitch is "AI from the ground up, not bolted on". This plan mat
 | R3 | Contract reader | Executed contract PDF → key terms (sum, dates, retention, LADs, payment terms) with clause references, plus Construction Act payment cycles | QS |
 | R6 | Project knowledge record | Every drawing, specification and project write embedded and summarised by managed agents on events or a schedule: a "time machine" for disputes and EOT claims | – |
 | R6 | Scheduled briefings | Friday weekly summary, 14-day look-ahead and per-person morning briefing, sent to Teams and Outlook | – |
+| R2 | Idle-hire watch | Hire records, site diary and kit movements → flags plant on hire but unused for 5+ days and drafts the off-hire request | Site manager |
+| R2 | Buy or keep hiring | Hire history per item type → suggests buying when cumulative hire passes the purchase price | Director |
 | R6 | Lessons learned | Estimate-v-final, loss reasons, snag history → pricing insights for the estimator | QS |
 | R6 | Heritage knowledge pack | Lime, stone and listed-building method statements and conservation-officer correspondence templates, grounded in BCJS's own past work and supplier guidance (e.g. Ty Mawr) | – |
 | R6 | Copilot and Claude interoperability | MCP server and Copilot agent over the same API, so staff can ask from Teams or Copilot chat | – |
