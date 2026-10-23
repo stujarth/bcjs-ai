@@ -17,6 +17,7 @@ const suggestions = [
   "Show me the history of VO-114",
   "What's stopping Llanover Lodge from starting on site?",
   "Which POs are waiting for my approval?",
+  "What plant is on hire and sitting idle?",
   "Summarise Goytre Grange's commercial position",
 ];
 

@@ -2,7 +2,9 @@
 // and the scripted fallback. Production swaps these for permission-checked API calls.
 import type Anthropic from "@anthropic-ai/sdk";
 import {
+  assets,
   compliance,
+  hireRecords,
   enquiries,
   openingCashPence,
   projects,
@@ -69,9 +71,14 @@ export const askTools: Anthropic.Beta.BetaTool[] = [
     description: "Enquiry pipeline, optionally filtered by stage (new, qualifying, surveyed, converted, lost, dormant).",
     input_schema: { type: "object", properties: { stage: { type: "string" } }, additionalProperties: false },
   },
+  {
+    name: "list_assets_on_hire",
+    description: "Plant and equipment currently on hire: supplier, job, PO, days on hire, idle days, weekly rate and cost to date.",
+    input_schema: { type: "object", properties: {}, additionalProperties: false },
+  },
 ];
 
-const moneyTools = new Set(["get_project", "list_variations", "list_purchase_orders", "list_xero_exceptions", "get_cash_forecast", "list_projects"]);
+const moneyTools = new Set(["list_assets_on_hire", "get_project", "list_variations", "list_purchase_orders", "list_xero_exceptions", "get_cash_forecast", "list_projects"]);
 
 export function runAskTool(name: string, input: Record<string, unknown>, role: RoleKey): string {
   if (moneyTools.has(name) && !MONEY_ROLES.includes(role)) {
@@ -134,6 +141,8 @@ export function runAskTool(name: string, input: Record<string, unknown>, role: R
           .map((e) => ({ ref: e.ref, client: e.client, type: e.type, stage: e.stage, value: formatMoney(e.potentialValuePence), age_days: e.ageDays, source: e.source })),
       );
     }
+    case "list_assets_on_hire":
+      return JSON.stringify(hireRecordsSummary());
     default:
       return JSON.stringify({ error: `Unknown tool ${name}` });
   }
@@ -207,6 +216,17 @@ export function scriptedAnswer(q: string, role: RoleKey): { answer: string; tool
       answer: `${open.length} open enquiries worth ${formatMoney(open.reduce((a, e) => a + e.potentialValuePence, 0))} in total. The biggest is ENQ-0405 The Old Forge (£380k, surveyed, ready to convert). Two new web enquiries arrived in the last 48 hours and have no survey booked yet.`,
     };
   }
+  if (s.includes("hire") || s.includes("plant") || s.includes("idle")) {
+    const rows = hireRecordsSummary().sort((a, b) => b.idle_days - a.idle_days);
+    const idle = rows.filter((r) => r.idle_days > 5);
+    return {
+      tools: ["list_assets_on_hire()"],
+      answer:
+        `${rows.length} items on hire, costing ${formatMoney(hireRecords.reduce((n, h) => n + h.ratePerWeekPence, 0))} a week:\n` +
+        rows.map((r) => `• ${r.asset} (${r.supplier}, ${r.job}): ${r.days_on_hire} days, ${r.cost_to_date} so far${r.idle_days > 5 ? `, idle ${r.idle_days} days` : ""}`).join("\n") +
+        (idle.length ? `\n\n${idle.length} have been idle for more than 5 days. Off-hiring them today saves about ${formatMoney(idle.reduce((n, r) => n + r.rate_pence, 0))} a week. Want me to draft the off-hire requests for you to send?` : ""),
+    };
+  }
   if (s.includes("insurance") || s.includes("cscs") || s.includes("compliance") || s.includes("expir")) {
     return {
       tools: ["list_compliance_alerts()"],
@@ -218,4 +238,21 @@ export function scriptedAnswer(q: string, role: RoleKey): { answer: string; tool
     answer:
       "In the live build I'd answer from the full project record. This demo has scripted answers for cash RAG, VO-114, Llanover Lodge's start gate, POs awaiting approval, Goytre's commercial position, the enquiry pipeline and compliance expiries. Set ANTHROPIC_API_KEY on the deployment to switch to live Claude answers.",
   };
+}
+
+function hireRecordsSummary() {
+  return hireRecords.map((h) => {
+    const a = assets.find((x) => x.id === h.assetId);
+    return {
+      asset: a?.name ?? h.assetId,
+      supplier: h.supplier,
+      job: projects.find((p) => p.id === h.projectId)?.name ?? h.projectId,
+      po: h.poRef,
+      days_on_hire: h.daysOnHire,
+      idle_days: h.idleDays,
+      rate_pence: h.ratePerWeekPence,
+      weekly_rate: formatMoney(h.ratePerWeekPence),
+      cost_to_date: formatMoney(Math.round((h.ratePerWeekPence * h.daysOnHire) / 7)),
+    };
+  });
 }

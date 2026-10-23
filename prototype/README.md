@@ -25,7 +25,8 @@ pnpm build && pnpm start
 | `/commercial` | CVR & variation register, with forecast-inclusion toggles | R4 |
 | `/procurement` | POs & approval bands, Xero feed, AI invoice extraction review, Teams approval card | R4 |
 | `/cashflow` | 13-week cash flow with scenarios | R4 |
-| `/site` | Site PWA: today, time, dictated diary, evidence gate, offline queue | R4 |
+| `/assets`, `/assets/[id]` | Tools & equipment (replaces Kabyn): register with bulk quantities by location, hire tracker with idle-hire off-hire, PAT/LOLER/calibration inspections that block check-out, movement log, QR labels | Phase 2 |
+| `/site` | Site PWA: today, time, dictated diary, evidence gate, Kit (QR check-out/in), offline queue | R4 |
 | `/compliance` | Expiry alerts, supplier register, incident log, AI RAMS drafter | R3 |
 | `/integrations` | Microsoft 365 / Xero / Adobe / Claude connections and architecture | – |
 

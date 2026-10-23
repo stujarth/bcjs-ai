@@ -20,6 +20,7 @@ import {
   Sparkles,
   Sun,
   TrendingUp,
+  Wrench,
   Truck,
   X,
 } from "lucide-react";
@@ -33,6 +34,7 @@ const nav = [
     { key: "dashboard", href: "/", label: "Dashboard", icon: LayoutDashboard },
     { key: "projects", href: "/projects", label: "Projects", icon: Building2 },
     { key: "site", href: "/site", label: "Site app", icon: HardHat },
+    { key: "assets", href: "/assets", label: "Tools & equipment", icon: Wrench },
     { key: "insights", href: "/insights", label: "AI briefings", icon: Sparkles },
   ]},
   { group: "Win work", items: [

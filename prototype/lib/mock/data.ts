@@ -1104,3 +1104,137 @@ export const tenderPackages: TenderPackage[] = [
     tqs: [],
   },
 ];
+
+// ---------- Tools & equipment (replaces Kabyn) ----------
+export type AssetStatus = "available" | "in use" | "on hire" | "service" | "lost" | "damaged";
+
+export interface AssetSplit {
+  location: string;
+  qty: number;
+}
+
+export interface Asset {
+  id: string;
+  tag: string;
+  name: string;
+  category: string;
+  kind: "serialised" | "bulk";
+  ownership: "owned" | "hired";
+  qty: number;
+  split?: AssetSplit[];
+  serial?: string;
+  valuePence: number;
+  supplier: string;
+  status: AssetStatus;
+  location: string;
+  holder?: string;
+  projectId?: string;
+  condition: "good" | "fair" | "poor";
+  chargePerWeekPence?: number;
+  utilisationPct: number;
+  hiredTimesThisYear?: number;
+}
+
+export interface HireRecord {
+  id: string;
+  assetId: string;
+  supplier: string;
+  poRef: string;
+  projectId: string;
+  costCode: string;
+  onHireDate: string;
+  daysOnHire: number;
+  idleDays: number;
+  ratePerWeekPence: number;
+  status: "on hire" | "off-hire requested" | "returned";
+  collectionRef?: string;
+}
+
+export interface AssetMovement {
+  assetId: string;
+  at: string;
+  kind: "check-out" | "check-in" | "transfer" | "on hire" | "off hire" | "reported";
+  from: string;
+  to: string;
+  by: string;
+  note?: string;
+}
+
+export interface AssetInspection {
+  assetId: string;
+  kind: "PAT" | "LOLER" | "Calibration" | "Service" | "110 V check";
+  lastDone: string;
+  due: string;
+  daysLeft: number;
+}
+
+export const YARD = "Yard (Pontypool)";
+
+export const kabynImport = { records: 589, assets: 143, bulkGrouped: 61, duplicatesMerged: 12, missingLocation: 9 };
+
+export const assets: Asset[] = [
+  { id: "a01", tag: "BCJS-P-0007", name: "Hilti TE 1000 breaker 110 V", category: "Breakers & drills", kind: "serialised", ownership: "owned", qty: 1, serial: "TE1000-448812", valuePence: 145_000, supplier: "Travis Perkins – Cwmbran", status: "in use", location: "Goytre Grange", holder: "M. Ellery", projectId: "goytre", condition: "good", chargePerWeekPence: 4_500, utilisationPct: 72 },
+  { id: "a02", tag: "BCJS-T-0012", name: "Festool TS 55 track saw", category: "Saws", kind: "serialised", ownership: "owned", qty: 1, serial: "TS55-20931", valuePence: 62_000, supplier: "Hughes Forrest – Blackwood", status: "in use", location: "Usk Meadows", holder: "Llanover Joinery Co", projectId: "usk", condition: "good", chargePerWeekPence: 2_500, utilisationPct: 81 },
+  { id: "a03", tag: "BCJS-T-0013", name: "DeWalt DWS780 mitre saw 110 V", category: "Saws", kind: "serialised", ownership: "owned", qty: 1, serial: "DWS780-55120", valuePence: 54_000, supplier: "Travis Perkins – Cwmbran", status: "available", location: YARD, condition: "fair", chargePerWeekPence: 2_000, utilisationPct: 38 },
+  { id: "a04", tag: "BCJS-H-0101", name: "Thwaites 3t swivel dumper", category: "Plant", kind: "serialised", ownership: "hired", qty: 1, serial: "TPH-D3-0912", valuePence: 0, supplier: "Torfaen Plant Hire", status: "on hire", location: "Mamhilad Rise", projectId: "mamhilad", condition: "good", utilisationPct: 22 },
+  { id: "a05", tag: "BCJS-H-0102", name: "Timberwolf TW 230 chipper (petrol)", category: "Plant", kind: "serialised", ownership: "hired", qty: 1, serial: "VT-CH-2210", valuePence: 0, supplier: "Versatool", status: "on hire", location: "Goytre Grange", projectId: "goytre", condition: "good", utilisationPct: 9, hiredTimesThisYear: 7 },
+  { id: "a06", tag: "BCJS-H-0103", name: "Genie GS-1932 scissor lift", category: "Access", kind: "serialised", ownership: "hired", qty: 1, serial: "VT-SL-1932-07", valuePence: 0, supplier: "Versatool", status: "on hire", location: "Raglan Court", projectId: "raglan", condition: "good", utilisationPct: 64 },
+  { id: "a07", tag: "BCJS-P-0021", name: "Belle Minimix 150 lime mixer 110 V", category: "Mixers", kind: "serialised", ownership: "owned", qty: 1, serial: "BM150-77310", valuePence: 48_000, supplier: "Travis Perkins – Abercarn", status: "in use", location: "Raglan Court", holder: "Dave Rowntree", projectId: "raglan", condition: "fair", chargePerWeekPence: 1_800, utilisationPct: 66 },
+  { id: "a08", tag: "BCJS-A-0030", name: "BoSS Clima aluminium tower 5.2 m", category: "Access", kind: "serialised", ownership: "owned", qty: 1, serial: "BOSS-CL-5203", valuePence: 185_000, supplier: "Hughes Forrest – Blackwood", status: "in use", location: "Goytre Grange", holder: "Dave Rowntree", projectId: "goytre", condition: "good", chargePerWeekPence: 6_000, utilisationPct: 58 },
+  { id: "a09", tag: "BCJS-T-0044", name: "Leica Lino L6R laser level", category: "Survey & levels", kind: "serialised", ownership: "owned", qty: 1, serial: "L6R-90122", valuePence: 98_000, supplier: "Travis Perkins – Cwmbran", status: "in use", location: "Van 2 (G. Thomas)", holder: "Gareth Thomas", condition: "good", utilisationPct: 47 },
+  { id: "a10", tag: "BCJS-E-0050", name: "110 V site transformer 3.3 kVA", category: "Power", kind: "bulk", ownership: "owned", qty: 8, split: [{ location: "Goytre Grange", qty: 3 }, { location: "Raglan Court", qty: 2 }, { location: "Usk Meadows", qty: 1 }, { location: YARD, qty: 2 }], valuePence: 7_500, supplier: "Travis Perkins – Cwmbran", status: "in use", location: "4 locations", condition: "good", utilisationPct: 75 },
+  { id: "a11", tag: "BCJS-B-0060", name: "Heras fence panel 3.5 × 2 m", category: "Heras fencing", kind: "bulk", ownership: "owned", qty: 60, split: [{ location: "Goytre Grange", qty: 24 }, { location: "Raglan Court", qty: 20 }, { location: YARD, qty: 16 }], valuePence: 3_200, supplier: "Travis Perkins – Abercarn", status: "in use", location: "3 locations", condition: "good", utilisationPct: 73 },
+  { id: "a12", tag: "BCJS-B-0061", name: "Heras rubber feet & clamps (sets)", category: "Heras fencing", kind: "bulk", ownership: "owned", qty: 64, split: [{ location: "Goytre Grange", qty: 26 }, { location: "Raglan Court", qty: 20 }, { location: YARD, qty: 18 }], valuePence: 900, supplier: "Travis Perkins – Abercarn", status: "in use", location: "3 locations", condition: "fair", utilisationPct: 72 },
+  { id: "a13", tag: "BCJS-B-0070", name: "Belle Warrior wheelbarrow 100 L", category: "Wheelbarrows", kind: "bulk", ownership: "owned", qty: 6, split: [{ location: "Goytre Grange", qty: 2 }, { location: "Mamhilad Rise", qty: 1 }, { location: YARD, qty: 3 }], valuePence: 6_500, supplier: "Hughes Forrest – Blackwood", status: "in use", location: "3 locations", condition: "fair", utilisationPct: 50 },
+  { id: "a14", tag: "BCJS-B-0080", name: "\"Caution site entrance\" sign", category: "Signage", kind: "bulk", ownership: "owned", qty: 5, split: [{ location: "Goytre Grange", qty: 2 }, { location: "Mamhilad Rise", qty: 2 }, { location: YARD, qty: 1 }], valuePence: 2_500, supplier: "B&Q", status: "in use", location: "3 locations", condition: "good", utilisationPct: 80 },
+  { id: "a15", tag: "BCJS-T-0090", name: "Erbauer 4½\" angle grinder 240 V", category: "Grinders", kind: "serialised", ownership: "owned", qty: 1, serial: "ERB-AG-4410", valuePence: 4_500, supplier: "B&Q", status: "service", location: YARD, condition: "poor", utilisationPct: 31 },
+  { id: "a16", tag: "BCJS-T-0091", name: "Makita GA5030 grinder 110 V", category: "Grinders", kind: "serialised", ownership: "owned", qty: 1, serial: "GA5030-118830", valuePence: 8_500, supplier: "Travis Perkins – Cwmbran", status: "lost", location: "Last seen: Mamhilad Rise", holder: "Gwent Groundworks", projectId: "mamhilad", condition: "good", utilisationPct: 0 },
+  { id: "a17", tag: "BCJS-E-0100", name: "Cyclone 300 mm dust & fume extractor 110 V", category: "Ventilation", kind: "serialised", ownership: "owned", qty: 1, serial: "CYC300-2231", valuePence: 21_000, supplier: "B&Q", status: "available", location: YARD, condition: "good", utilisationPct: 18 },
+  { id: "a18", tag: "BCJS-T-0110", name: "Festool OF 1400 router", category: "Joinery tools", kind: "serialised", ownership: "owned", qty: 1, serial: "OF1400-77219", valuePence: 59_000, supplier: "Hughes Forrest – Blackwood", status: "in use", location: "Van 1 (D. Rowntree)", holder: "Dave Rowntree", condition: "good", utilisationPct: 54 },
+  { id: "a19", tag: "BCJS-T-0111", name: "Makita DHR243 SDS drill (cordless)", category: "Breakers & drills", kind: "bulk", ownership: "owned", qty: 4, split: [{ location: "Usk Meadows", qty: 2 }, { location: "Van 1 (D. Rowntree)", qty: 1 }, { location: YARD, qty: 1 }], valuePence: 26_000, supplier: "Travis Perkins – Cwmbran", status: "in use", location: "3 locations", condition: "good", utilisationPct: 69 },
+  { id: "a20", tag: "BCJS-V-0001", name: "Ford Transit Custom (CA71 BCJ)", category: "Vehicles", kind: "serialised", ownership: "owned", qty: 1, serial: "VIN …4471", valuePence: 2_650_000, supplier: "Lease – Ford Lex", status: "in use", location: "Van 1 (D. Rowntree)", holder: "Dave Rowntree", condition: "good", utilisationPct: 92 },
+  { id: "a21", tag: "BCJS-C-0001", name: "Welfare cabin 12 × 8 ft", category: "Cabins & welfare", kind: "serialised", ownership: "owned", qty: 1, serial: "WC-128-03", valuePence: 640_000, supplier: "Hughes Forrest – Blackwood", status: "in use", location: "Goytre Grange", projectId: "goytre", condition: "fair", chargePerWeekPence: 9_500, utilisationPct: 88 },
+  { id: "a22", tag: "BCJS-H-0104", name: "Chain hoist 1 t", category: "Lifting", kind: "serialised", ownership: "owned", qty: 1, serial: "CH1T-50213", valuePence: 32_000, supplier: "Travis Perkins – Abercarn", status: "available", location: YARD, condition: "good", utilisationPct: 12 },
+  { id: "a23", tag: "BCJS-T-0120", name: "Moisture meter (pin & pinless)", category: "Survey & levels", kind: "serialised", ownership: "owned", qty: 1, serial: "MM-PRO-118", valuePence: 18_500, supplier: "Ty Mawr Lime", status: "in use", location: "Raglan Court", holder: "Dave Rowntree", projectId: "raglan", condition: "good", utilisationPct: 40 },
+  { id: "a24", tag: "BCJS-H-0105", name: "Belle PCX 450 plate compactor", category: "Plant", kind: "serialised", ownership: "hired", qty: 1, serial: "VT-PC-450-22", valuePence: 0, supplier: "Versatool", status: "on hire", location: "Llanover Lodge", projectId: "llanover", condition: "good", utilisationPct: 0 },
+];
+
+export const hireRecords: HireRecord[] = [
+  { id: "h1", assetId: "a04", supplier: "Torfaen Plant Hire", poRef: "PO-2851", projectId: "mamhilad", costCode: "PLT-01", onHireDate: "01 Sep 2026", daysOnHire: 49, idleDays: 11, ratePerWeekPence: 18_500, status: "on hire" },
+  { id: "h2", assetId: "a05", supplier: "Versatool", poRef: "PO-2866", projectId: "goytre", costCode: "PLT-01", onHireDate: "29 Sep 2026", daysOnHire: 21, idleDays: 8, ratePerWeekPence: 24_000, status: "on hire" },
+  { id: "h3", assetId: "a06", supplier: "Versatool", poRef: "PO-2859", projectId: "raglan", costCode: "ACC-01", onHireDate: "06 Oct 2026", daysOnHire: 14, idleDays: 0, ratePerWeekPence: 21_000, status: "on hire" },
+  { id: "h4", assetId: "a24", supplier: "Versatool", poRef: "PO-2867", projectId: "llanover", costCode: "GRD-02", onHireDate: "16 Oct 2026", daysOnHire: 4, idleDays: 4, ratePerWeekPence: 6_500, status: "on hire" },
+];
+
+export const hireReturned = [
+  { asset: "Kubota KX016 mini digger", supplier: "Torfaen Plant Hire", projectId: "goytre", days: 26, costPence: 98_000, returned: "02 Oct 2026", collectionRef: "TPH-COL-55120" },
+  { asset: "Stihl TS 410 disc cutter", supplier: "Versatool", projectId: "usk", days: 5, costPence: 4_500, returned: "09 Oct 2026", collectionRef: "VT-RTN-2291" },
+];
+
+export const assetMovements: AssetMovement[] = [
+  { assetId: "a01", at: "19 Oct 07:42", kind: "check-out", from: YARD, to: "Goytre Grange", by: "M. Ellery", note: "Scanned QR · condition good · photo" },
+  { assetId: "a01", at: "16 Oct 16:10", kind: "check-in", from: "Raglan Court", to: YARD, by: "Dave Rowntree", note: "Bit worn, replace" },
+  { assetId: "a01", at: "05 Oct 07:30", kind: "check-out", from: YARD, to: "Raglan Court", by: "Dave Rowntree" },
+  { assetId: "a04", at: "01 Sep 09:00", kind: "on hire", from: "Torfaen Plant Hire", to: "Mamhilad Rise", by: "Dave Rowntree", note: "PO-2851 · delivery note TPH-D-8812" },
+  { assetId: "a05", at: "29 Sep 10:15", kind: "on hire", from: "Versatool", to: "Goytre Grange", by: "Gareth Thomas", note: "PO-2866" },
+  { assetId: "a16", at: "14 Oct 15:20", kind: "reported", from: "Mamhilad Rise", to: "Lost", by: "Dave Rowntree", note: "Not returned by Gwent Groundworks · incident INC-014 · charged to MAM GEN-01" },
+  { assetId: "a16", at: "28 Sep 07:50", kind: "check-out", from: YARD, to: "Mamhilad Rise", by: "Gwent Groundworks" },
+  { assetId: "a02", at: "07 Oct 08:05", kind: "transfer", from: "Van 1 (D. Rowntree)", to: "Usk Meadows", by: "Llanover Joinery Co", note: "Signed for kit · subcontractor portal" },
+  { assetId: "a11", at: "12 Oct 11:30", kind: "transfer", from: YARD, to: "Goytre Grange", by: "Dave Rowntree", note: "8 panels" },
+];
+
+export const assetInspections: AssetInspection[] = [
+  { assetId: "a01", kind: "PAT", lastDone: "12 Apr 2026", due: "12 Oct 2026", daysLeft: -8 },
+  { assetId: "a03", kind: "PAT", lastDone: "02 Jun 2026", due: "02 Dec 2026", daysLeft: 43 },
+  { assetId: "a07", kind: "PAT", lastDone: "15 May 2026", due: "15 Nov 2026", daysLeft: 26 },
+  { assetId: "a08", kind: "Service", lastDone: "20 Apr 2026", due: "20 Oct 2026", daysLeft: 0 },
+  { assetId: "a09", kind: "Calibration", lastDone: "03 Nov 2025", due: "03 Nov 2026", daysLeft: 14 },
+  { assetId: "a10", kind: "110 V check", lastDone: "01 Aug 2026", due: "01 Nov 2026", daysLeft: 12 },
+  { assetId: "a17", kind: "PAT", lastDone: "10 Jul 2026", due: "10 Jan 2027", daysLeft: 82 },
+  { assetId: "a18", kind: "PAT", lastDone: "18 Mar 2026", due: "18 Sep 2026", daysLeft: -32 },
+  { assetId: "a22", kind: "LOLER", lastDone: "28 Apr 2026", due: "28 Oct 2026", daysLeft: 8 },
+  { assetId: "a06", kind: "LOLER", lastDone: "01 Oct 2026", due: "01 Apr 2027", daysLeft: 163 },
+];
+
+/** An asset is blocked from check-out while any inspection is overdue. */
+export const assetBlocked = (assetId: string) => assetInspections.some((i) => i.assetId === assetId && i.daysLeft < 0);

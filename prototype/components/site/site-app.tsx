@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Camera, CalendarDays, Clock, Mic, WifiOff, Wifi, RefreshCw } from "lucide-react";
+import { Camera, CalendarDays, Clock, Mic, WifiOff, Wifi, RefreshCw, Wrench } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { useRole } from "@/components/role-context";
 import { TODAY } from "@/lib/mock/data";
@@ -10,20 +10,22 @@ import { TodayTab } from "./today-tab";
 import { TimeTab } from "./time-tab";
 import { DiaryTab } from "./diary-tab";
 import { CaptureTab } from "./capture-tab";
+import { KitTab } from "./kit-tab";
 
-export type SiteTab = "today" | "time" | "diary" | "capture";
+export type SiteTab = "today" | "time" | "diary" | "capture" | "kit";
 
 const allTabs: { key: SiteTab; label: string; icon: typeof Clock }[] = [
   { key: "today", label: "Today", icon: CalendarDays },
   { key: "time", label: "Time", icon: Clock },
   { key: "diary", label: "Diary", icon: Mic },
   { key: "capture", label: "Capture", icon: Camera },
+  { key: "kit", label: "Kit", icon: Wrench },
 ];
 
 export function SiteApp() {
   const { role } = useRole();
   const isSub = role === "subcontractor";
-  const tabs = isSub ? allTabs.filter((t) => t.key === "today" || t.key === "time") : allTabs;
+  const tabs = isSub ? allTabs.filter((t) => t.key === "today" || t.key === "time" || t.key === "kit") : allTabs;
   const [tab, setTab] = useState<SiteTab>("today");
   const conn = useConnectivity();
 
@@ -85,6 +87,7 @@ export function SiteApp() {
         {tab === "time" && <TimeTab submit={conn.submit} online={conn.online} />}
         {tab === "diary" && <DiaryTab submit={conn.submit} />}
         {tab === "capture" && <CaptureTab submit={conn.submit} />}
+        {tab === "kit" && <KitTab submit={conn.submit} holder={isSub ? "Llanover Joinery Co" : "Dave Rowntree"} />}
       </div>
 
       {/* Bottom tab bar */}

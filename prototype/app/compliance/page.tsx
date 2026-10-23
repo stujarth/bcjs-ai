@@ -1,11 +1,13 @@
 import { AlertTriangle } from "lucide-react";
 import { Badge, Card, PageHeader, Stat, Table, Td, Th } from "@/components/ui";
 import { RamsDrafter } from "@/components/compliance/rams-drafter";
-import { compliance, incidents, projectById, rams, suppliers } from "@/lib/mock/data";
+import Link from "next/link";
+import { assetInspections, assets, compliance, incidents, projectById, rams, suppliers } from "@/lib/mock/data";
 
 export default function CompliancePage() {
   const expiring = suppliers.filter((s) => s.status !== "good");
   const ramsAttention = rams.filter((r) => r.status !== "Approved");
+  const kitDue = assetInspections.filter((i) => i.daysLeft <= 30).sort((a, b) => a.daysLeft - b.daysLeft);
 
   return (
     <>
@@ -39,6 +41,26 @@ export default function CompliancePage() {
             ))}
           </ul>
           <p className="mt-3 text-xs text-muted">Expiries feed the job readiness checklist and block purchase orders to that supplier until renewed.</p>
+          <h3 className="mb-1 mt-4 text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">Tools & equipment inspections</h3>
+          <ul className="divide-y divide-hair">
+            {kitDue.map((i) => {
+              const a = assets.find((x) => x.id === i.assetId)!;
+              return (
+                <li key={`${i.assetId}-${i.kind}`} className="flex items-center gap-3 py-2 text-sm">
+                  <AlertTriangle size={16} className={i.daysLeft < 0 ? "text-bad" : "text-warn"} />
+                  <div className="flex-1">
+                    <Link href={`/assets/${a.id}`} className="font-semibold hover:underline">
+                      {a.name}
+                    </Link>
+                    <div className="text-xs text-muted">
+                      {i.kind} · due {i.due}
+                    </div>
+                  </div>
+                  <Badge tone={i.daysLeft < 0 ? "bad" : "warn"}>{i.daysLeft < 0 ? `${-i.daysLeft} days overdue` : `${i.daysLeft} days`}</Badge>
+                </li>
+              );
+            })}
+          </ul>
         </Card>
         <RamsDrafter />
       </div>
